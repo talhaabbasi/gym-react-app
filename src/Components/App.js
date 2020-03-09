@@ -1,16 +1,29 @@
 import React, { Component, Fragment } from "react";
 import { Header, Footer } from "./Layouts";
 import Excercises from "../Excercises";
-import { Muscles, Excercises } from "../store";
+import { excercises, muscles } from "../store";
 
 class App extends Component {
-  state = {};
+  state = { excercises };
+  getExcercisesByMuscles() {
+    return Object.entries(
+      this.state.excercises.reduce((excercises, excercise) => {
+        const { muscles } = excercise;
+        excercises[muscles] = excercises[muscles]
+          ? [...excercises[muscles], excercise]
+          : [excercise];
+        return excercises;
+      }, {})
+    );
+  }
   render() {
+    const excercises = this.getExcercisesByMuscles();
+    console.log(this.getExcercisesByMuscles());
     return (
       <Fragment>
         <Header />
-        <Excercises />
-        <Footer />
+        <Excercises excercises={excercises} />
+        <Footer muscles={muscles} />
       </Fragment>
     );
   }
